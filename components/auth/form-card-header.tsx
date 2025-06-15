@@ -1,5 +1,8 @@
+'use client';
+
 import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ShoppingCart } from 'lucide-react';
+import { SocialHeader } from '@/components/auth/social-header';
 
 interface FormCardHeaderProps {
   title: string;
@@ -19,6 +22,7 @@ export function FormCardHeader({ title, description }: FormCardHeaderProps) {
           {description}
         </CardDescription>
       </div>
+      <SocialHeader />
     </CardHeader>
   );
 }

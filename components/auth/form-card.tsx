@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { FormCardHeader } from '@/components/auth/form-card-header';
 import { cn } from '@/lib/utils';
+import { Separator } from '@radix-ui/react-separator';
 interface FormCardProps {
   title: string;
   description: string;
