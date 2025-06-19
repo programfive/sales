@@ -1,12 +1,11 @@
 'use client';
 
 import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from '@tabler/icons-react';
+  CreditCard,
+  MoreVertical,
+  Bell,
+  User,
+} from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -24,17 +23,58 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { User as SupabaseUser } from '@supabase/supabase-js';
+import { LogoutButton } from '@/components/logout-button';
+
+interface NavUserProps {
+  isLoading: boolean;
+  user: SupabaseUser | null;
+}
 
 export function NavUser({
   user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+  isLoading
+}: NavUserProps) {
   const { isMobile } = useSidebar();
+
+  if (isLoading) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size='lg'>
+            <Skeleton className='h-8 w-8 rounded-lg' />
+            <div className='grid flex-1 text-left text-sm leading-tight gap-1'>
+              <Skeleton className='h-4 w-20' />
+              <Skeleton className='h-3 w-24' />
+            </div>
+            <Skeleton className='ml-auto size-4' />
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
+  if (!user) {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size='lg'>
+            <Skeleton className='h-8 w-8 rounded-lg' />
+            <div className='grid flex-1 text-left text-sm leading-tight gap-1'>
+              <Skeleton className='h-4 w-16' />
+              <Skeleton className='h-3 w-20' />
+            </div>
+            <Skeleton className='ml-auto size-4' />
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
+
+  const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
+  const userEmail = user.email || '';
+  const userAvatar = user.user_metadata?.avatar_url || '/avatars/default.jpg';
 
   return (
     <SidebarMenu>
@@ -46,16 +86,16 @@ export function NavUser({
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
             >
               <Avatar className='h-8 w-8 rounded-lg grayscale'>
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={userAvatar} alt={userName} />
                 <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-medium'>{user.name}</span>
+                <span className='truncate font-medium'>{userName}</span>
                 <span className='text-muted-foreground truncate text-xs'>
-                  {user.email}
+                  {userEmail}
                 </span>
               </div>
-              <IconDotsVertical className='ml-auto size-4' />
+              <MoreVertical className='ml-auto size-4' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -67,13 +107,13 @@ export function NavUser({
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={userAvatar} alt={userName} />
                   <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-medium'>{user.name}</span>
+                  <span className='truncate font-medium'>{userName}</span>
                   <span className='text-muted-foreground truncate text-xs'>
-                    {user.email}
+                    {userEmail}
                   </span>
                 </div>
               </div>
@@ -81,22 +121,28 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconUserCircle />
+                <User className='mr-2 h-4 w-4' />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconCreditCard />
+                <CreditCard className='mr-2 h-4 w-4' />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconNotification />
+                <Bell className='mr-2 h-4 w-4' />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconLogout />
-              Log out
+            <DropdownMenuItem asChild>
+              <LogoutButton 
+                variant="ghost" 
+                size="sm" 
+                className="w-full justify-start h-auto p-0"
+                showIcon={true}
+              >
+                Log out
+              </LogoutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

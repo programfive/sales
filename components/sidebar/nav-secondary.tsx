@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { type Icon } from '@tabler/icons-react';
 
 import {
   SidebarGroup,
@@ -10,6 +9,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+
+type Icon = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
 export function NavSecondary({
   items,
