@@ -18,10 +18,9 @@ import {
 import { data } from '@/constants/data';
 import { useAuth } from '@/hooks/use-auth';
 
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, loading } = useAuth();
-  
+
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarHeader>
@@ -45,10 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser
-          user={user}
-          isLoading={loading}
-        />
+        <NavUser user={user} isLoading={loading} />
       </SidebarFooter>
     </Sidebar>
   );

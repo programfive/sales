@@ -369,10 +369,10 @@ function SidebarSeparator({
   );
 }
 
-function SidebarContent({ 
-  className, 
+function SidebarContent({
+  className,
   children,
-  ...props 
+  ...props
 }: React.ComponentProps<typeof ScrollArea>) {
   return (
     <ScrollArea
@@ -731,4 +731,3 @@ export {
   SidebarTrigger,
   useSidebar,
 };
-

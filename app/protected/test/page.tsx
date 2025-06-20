@@ -12,8 +12,11 @@ export default function TestPage() {
   useEffect(() => {
     // Obtener el usuario actual
     const getUser = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
       if (error) {
         console.error('Error getting user:', error);
       } else {
@@ -25,12 +28,12 @@ export default function TestPage() {
     getUser();
 
     // Escuchar cambios de autenticación
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
-        setLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+      setLoading(false);
+    });
 
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
