@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  CreditCard,
-  MoreVertical,
-  Bell,
-  User,
-} from 'lucide-react';
+import { CreditCard, MoreVertical, Bell, User } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -26,16 +21,13 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { LogoutButton } from '@/components/logout-button';
-
+import Link from 'next/link';
 interface NavUserProps {
   isLoading: boolean;
   user: SupabaseUser | null;
 }
 
-export function NavUser({
-  user,
-  isLoading
-}: NavUserProps) {
+export function NavUser({ user, isLoading }: NavUserProps) {
   const { isMobile } = useSidebar();
 
   if (isLoading) {
@@ -72,7 +64,8 @@ export function NavUser({
     );
   }
 
-  const userName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
+  const userName =
+    user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
   const userEmail = user.email || '';
   const userAvatar = user.user_metadata?.avatar_url || '/avatars/default.jpg';
 
@@ -120,28 +113,34 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <User className='mr-2 h-4 w-4' />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href='/account' className='flex items-center'>
+                  <User className='mr-2 h-4 w-4' />
+                  Perfil
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard className='mr-2 h-4 w-4' />
-                Billing
+              <DropdownMenuItem asChild>
+                <Link href='/billing' className='flex items-center'>
+                  <CreditCard className='mr-2 h-4 w-4' />
+                  Facturación
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell className='mr-2 h-4 w-4' />
-                Notifications
+              <DropdownMenuItem asChild>
+                <Link href='/notifications' className='flex items-center'>
+                  <Bell className='mr-2 h-4 w-4' />
+                  Notificaciones
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <LogoutButton 
-                variant="ghost" 
-                size="sm" 
-                className="w-full justify-start h-auto p-0"
+              <LogoutButton
+                variant='ghost'
+                size='sm'
+                className='w-full justify-start h-auto p-0'
                 showIcon={true}
               >
-                Log out
+                Cerrar sesión
               </LogoutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>

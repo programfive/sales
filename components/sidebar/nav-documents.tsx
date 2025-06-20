@@ -1,12 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import {
-  MoreHorizontal,
-  Folder,
-  Share2,
-  Trash2,
-} from 'lucide-react';
+import { MoreHorizontal, Folder, Share2, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {

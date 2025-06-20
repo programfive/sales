@@ -6,19 +6,25 @@ import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
 interface LogoutButtonProps {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link';
   size?: 'default' | 'sm' | 'lg' | 'icon';
   className?: string;
   children?: React.ReactNode;
   showIcon?: boolean;
 }
 
-export function LogoutButton({ 
-  variant = 'default', 
-  size = 'default', 
+export function LogoutButton({
+  variant = 'default',
+  size = 'default',
   className,
   children = 'Logout',
-  showIcon = true
+  showIcon = true,
 }: LogoutButtonProps) {
   const router = useRouter();
 
@@ -29,13 +35,13 @@ export function LogoutButton({
   };
 
   return (
-    <Button 
-      onClick={logout} 
-      variant={variant} 
+    <Button
+      onClick={logout}
+      variant={variant}
       size={size}
       className={className}
     >
-      {showIcon && <LogOut className="mr-2 h-4 w-4" />}
+      {showIcon && <LogOut className='mr-2 h-4 w-4' />}
       {children}
     </Button>
   );
