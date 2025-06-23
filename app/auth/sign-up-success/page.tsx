@@ -3,12 +3,12 @@ import { FormCard } from '@/components/auth/form-card';
 export default function Page() {
   return (
     <FormCard
-      title='Thank you for signing up!'
-      description='Check your email to confirm'
+      title='¡Gracias por registrarte!'
+      description='Revisa tu correo electrónico para confirmar'
     >
       <p className='text-sm text-muted-foreground text-center'>
-        You&apos;ve successfully signed up. Please check your email to confirm
-        your account before signing in.
+        Te has registrado con éxito. Revisa su correo electrónico para confirmar
+        su cuenta antes de iniciar sesión.
       </p>
     </FormCard>
   );
