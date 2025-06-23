@@ -47,7 +47,8 @@ export function LoginForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <FormCard
         title='Sistema de Ventas'
-        description='Ingresa tus credenciales para acceder al dashboard'
+        description='Ingresa tus credenciales para acceder a tu cuenta.'
+        showSocialHeader={true}
       >
         <form onSubmit={handleLogin}>
           <div className='flex flex-col gap-6'>

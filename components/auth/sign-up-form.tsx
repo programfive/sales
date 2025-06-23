@@ -56,6 +56,7 @@ export function SignUpForm({
     <FormCard
       title='Sistema de Ventas'
       description='Ingresa tus credenciales para acceder al dashboard'
+      showSocialHeader={true}
     >
       <form
         className={cn('flex flex-col gap-6', className)}

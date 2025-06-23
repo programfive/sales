@@ -6,9 +6,15 @@ import { SocialHeader } from '@/components/auth/social-header';
 
 interface FormCardHeaderProps {
   title: string;
-  description: string;
+  description?: string;
+  showSocialHeader?: boolean;
 }
-export function FormCardHeader({ title, description }: FormCardHeaderProps) {
+
+export function FormCardHeader({
+  title,
+  description,
+  showSocialHeader,
+}: FormCardHeaderProps) {
   return (
     <CardHeader className='space-y-4 text-center'>
       <div className='mx-auto w-12 h-12 bg-primary rounded-xl flex items-center justify-center'>
@@ -18,11 +24,13 @@ export function FormCardHeader({ title, description }: FormCardHeaderProps) {
         <CardTitle className='text-2xl font-bold text-foreground'>
           {title}
         </CardTitle>
-        <CardDescription className='text-muted-foreground mt-2'>
-          {description}
-        </CardDescription>
+        {description && (
+          <CardDescription className='text-muted-foreground mt-2'>
+            {description}
+          </CardDescription>
+        )}
       </div>
-      <SocialHeader />
+      {showSocialHeader && <SocialHeader />}
     </CardHeader>
   );
 }
