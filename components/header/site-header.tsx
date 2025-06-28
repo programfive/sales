@@ -3,7 +3,6 @@
 import * as React from 'react';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { ThemeSwitcher } from '@/components/theme-switcher';
 import { NotificationButton } from '@/components/header/notification-button';
 import { Breadcrumbs } from '@/components/header/breadcrumbs';
 import { SearchButton } from './search-button';
@@ -21,7 +20,6 @@ export function SiteHeader() {
         <div className='ml-auto flex items-center gap-2'>
           <SearchButton />
           <NotificationButton />
-          <ThemeSwitcher />
         </div>
       </div>
     </header>
