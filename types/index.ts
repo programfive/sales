@@ -1,3 +1,6 @@
+import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
+
 export interface UserData {
   id: number;
   name: string;
@@ -14,4 +17,10 @@ export interface UserData {
     activeProducts: number;
     totalCustomers: number;
   };
+}
+
+export interface TabItem { 
+  value: string;
+  label: string;
+  icon: ReactNode;
 }

@@ -16,4 +16,5 @@ export const profileFormSchema = z.object({
       'Solo se aceptan formatos .jpg, .jpeg, .png y .gif.'
     )
     .optional(),
+  avatarUrl: z.string().optional(),
 });

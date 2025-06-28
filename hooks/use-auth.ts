@@ -14,7 +14,7 @@ export function useAuth() {
       const {
         data: { user },
         error,
-      } = await supabase.auth.getUser();
+      } = await supabase.auth.getUser();  
 
       if (error) {
         console.error('Error getting user:', error);

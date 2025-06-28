@@ -1,7 +1,6 @@
 'use client';
 
 import { CreditCard, MoreVertical, Bell, User } from 'lucide-react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -22,6 +21,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { LogoutButton } from '@/components/logout-button';
 import Link from 'next/link';
+import { getInitials } from '@/tools/methods';
 interface NavUserProps {
   isLoading: boolean;
   user: SupabaseUser | null;
@@ -67,7 +67,11 @@ export function NavUser({ user, isLoading }: NavUserProps) {
   const userName =
     user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario';
   const userEmail = user.email || '';
-  const userAvatar = user.user_metadata?.avatar_url || '/avatars/default.jpg';
+  const userAvatar = user.user_metadata?.avatar_url;
+
+
+
+  const userInitials = getInitials(userName);
 
   return (
     <SidebarMenu>
@@ -80,7 +84,9 @@ export function NavUser({ user, isLoading }: NavUserProps) {
             >
               <Avatar className='h-8 w-8 rounded-lg grayscale'>
                 <AvatarImage src={userAvatar} alt={userName} />
-                <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                <AvatarFallback className='rounded-lg'>
+                  {userInitials}
+                </AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>{userName}</span>
@@ -101,7 +107,9 @@ export function NavUser({ user, isLoading }: NavUserProps) {
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
                   <AvatarImage src={userAvatar} alt={userName} />
-                  <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>
+                    {userInitials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>{userName}</span>
