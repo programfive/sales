@@ -16,49 +16,50 @@ interface AvatarUploadProps {
   onAvatarChange: (imageUrl: string) => void;
 }
 
-export function AvatarUpload({ 
-  currentAvatarUrl, 
-  userName, 
-  isEditing, 
-  onAvatarChange 
+export function AvatarUpload({
+  currentAvatarUrl,
+  userName,
+  isEditing,
+  onAvatarChange,
 }: AvatarUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const { setValue } = useFormContext();
-  const [lastCurrentAvatarUrl, setLastCurrentAvatarUrl] = useState<string | null>(currentAvatarUrl!);
+  const [lastCurrentAvatarUrl, setLastCurrentAvatarUrl] = useState<
+    string | null
+  >(currentAvatarUrl!);
 
   const currentAvatarUrlDisplay = uploadedImage || lastCurrentAvatarUrl;
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     startTransition(async () => {
       setIsUploading(true);
-      
+
       try {
         const { imageUrl, error } = await uploadImage({
           file,
-          bucket: 'images', 
-          folder: 'avatars'
+          bucket: 'images',
+          folder: 'avatars',
         });
-        if(imageUrl){
-            await deleteImage(lastCurrentAvatarUrl!);
-            setLastCurrentAvatarUrl(imageUrl);
+        if (imageUrl) {
+          await deleteImage(lastCurrentAvatarUrl!);
+          setLastCurrentAvatarUrl(imageUrl);
         }
 
         if (error) {
           toast.error('No se pudo subir la imagen');
           return;
         }
-        
+
         setUploadedImage(imageUrl);
         setValue('avatar', file);
         setValue('avatarUrl', imageUrl);
         onAvatarChange(imageUrl);
-        
       } catch (error) {
         toast.error('Error al procesar la imagen');
       } finally {
@@ -86,7 +87,7 @@ export function AvatarUpload({
         </Avatar>
         {isUploading && (
           <div className='absolute inset-0 flex items-center justify-center bg-black/50 rounded-full'>
-             <Loader className='w-6 h-6 animate-spin' />
+            <Loader className='w-6 h-6 animate-spin' />
           </div>
         )}
       </div>
@@ -94,17 +95,17 @@ export function AvatarUpload({
         {/* Input file oculto */}
         <input
           ref={fileInputRef}
-          type="file"
-          accept="image/*"
+          type='file'
+          accept='image/*'
           onChange={handleFileSelect}
-          className="hidden"
+          className='hidden'
         />
-        
+
         {isEditing ? (
           <Button
-            type="button"
-            variant="outline"
-            size="sm"
+            type='button'
+            variant='outline'
+            size='sm'
             onClick={handleChangePhotoClick}
             disabled={isUploading}
           >
@@ -123,4 +124,4 @@ export function AvatarUpload({
       </div>
     </div>
   );
-} 
+}

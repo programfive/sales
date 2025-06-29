@@ -1,4 +1,4 @@
-import { FormCard } from '@/components/auth/form-card';
+import { FormCard } from '@/components/modules/auth/form-card';
 
 export default function Page() {
   return (

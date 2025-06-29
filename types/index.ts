@@ -1,5 +1,5 @@
-import { LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { LucideIcon } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export interface UserData {
   id: number;
@@ -19,8 +19,22 @@ export interface UserData {
   };
 }
 
-export interface TabItem { 
+export interface Category {
+  id: number;
+  name: string;
+  description: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TabItem {
   value: string;
   label: string;
   icon: ReactNode;
 }
+export type BreadcrumbItemType = {
+  name: string;
+  href: string;
+  isLast: boolean;
+};

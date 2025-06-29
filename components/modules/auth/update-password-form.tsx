@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
-import { FormCard } from '@/components/auth/form-card';
+import { FormCard } from '@/components/modules/auth/form-card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';

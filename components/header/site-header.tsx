@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { NotificationButton } from '@/components/header/notification-button';
 import { Breadcrumbs } from '@/components/header/breadcrumbs';
-import { SearchButton } from './search-button';
+import { SearchButton } from '@/components/header/search-button';
 
 export function SiteHeader() {
   return (

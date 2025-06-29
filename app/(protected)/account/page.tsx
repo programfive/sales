@@ -1,7 +1,7 @@
-import { SettingsSection } from '@/components/profile/settings-section';
-import { ActivitySection } from '@/components/profile/activity-section';
-import { SecuritySection } from '@/components/profile/security-section';
-import { ProfileSection } from '@/components/profile/profile-section';
+import { SettingsSection } from '@/components/modules/profile/settings-section';
+import { ActivitySection } from '@/components/modules/profile/activity-section';
+import { SecuritySection } from '@/components/modules/profile/security-section';
+import { ProfileSection } from '@/components/modules/profile/profile-section';
 import { Badge } from '@/components/ui/badge';
 import { MobileTabs, MobileTabsContent } from '@/components/ui/mobile-tabs';
 import { tabItems, userData } from '@/constants/account';
@@ -9,13 +9,13 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { deleteImage } from '@/lib/supabase/storage/client';
 
-
 export default async function AccountPage() {
   const supabase = await createClient();
   const { data: authData } = await supabase.auth.getUser();
   if (!authData.user) {
     redirect('/login');
   }
+  console.log(authData.user.user_metadata.full_name);
   return (
     <div className='container mx-auto p-6 max-w-6xl'>
       <div className='flex flex-col space-y-2 mb-8'>

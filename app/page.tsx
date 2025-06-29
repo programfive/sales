@@ -1,4 +1,4 @@
-import { AuthButton } from '@/components/auth/auth-button';
+import { AuthButton } from '@/components/modules/auth/auth-button';
 import { DeployButton } from '@/components/deploy-button';
 import { EnvVarWarning } from '@/components/env-var-warning';
 import { Hero } from '@/components/hero';

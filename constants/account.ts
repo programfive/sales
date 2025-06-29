@@ -3,22 +3,22 @@ import { TabItem, UserData } from '@/types';
 import React from 'react';
 
 export const tabItems: TabItem[] = [
-    { value: 'profile', label: 'Perfil', icon: React.createElement(User) },
-    {
-      value: 'security',
-      label: 'Seguridad',
-      icon: React.createElement(Shield),
-    },
-    {
-      value: 'activity',
-      label: 'Actividad',
-      icon: React.createElement(Activity),
-    },
-    {
-      value: 'settings',
-      label: 'Configuración',
-      icon: React.createElement(Settings),
-    },
+  { value: 'profile', label: 'Perfil', icon: React.createElement(User) },
+  {
+    value: 'security',
+    label: 'Seguridad',
+    icon: React.createElement(Shield),
+  },
+  {
+    value: 'activity',
+    label: 'Actividad',
+    icon: React.createElement(Activity),
+  },
+  {
+    value: 'settings',
+    label: 'Configuración',
+    icon: React.createElement(Settings),
+  },
 ];
 export const userData: UserData = {
   id: 1,

@@ -8,6 +8,7 @@ export const routeNames: Record<string, string> = {
   '/customers': 'Clientes',
   '/suppliers': 'Proveedores',
   '/categories': 'Categorías',
+  '/categories/create': 'Crear',
   '/inventory-movements': 'Movimientos de Inventario',
   '/wastes': 'Mermas',
   '/reports': 'Reportes',

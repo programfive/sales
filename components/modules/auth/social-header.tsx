@@ -2,7 +2,7 @@
 
 import { Separator } from '@/components/ui/separator';
 import { Icons } from '@/components/ui/icons';
-import { SocialButton } from '@/components/auth/social-button';
+import { SocialButton } from '@/components/modules/auth/social-button';
 export function SocialHeader() {
   return (
     <>

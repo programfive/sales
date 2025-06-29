@@ -2,7 +2,7 @@
 
 import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ShoppingCart } from 'lucide-react';
-import { SocialHeader } from '@/components/auth/social-header';
+import { SocialHeader } from '@/components/modules/auth/social-header';
 
 interface FormCardHeaderProps {
   title: string;

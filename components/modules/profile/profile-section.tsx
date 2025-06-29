@@ -20,8 +20,9 @@ import { Label } from '@/components/ui/label';
 import { ShoppingCart, TrendingUp, Package, Users } from 'lucide-react';
 import { User as UserType } from '@supabase/supabase-js';
 import { updateUserProfile } from '@/actions/auth';
-import { AvatarUpload } from './avatar-upload';
+import { AvatarUpload } from '@/components/modules/profile/avatar-upload';
 import { toast } from 'sonner';
+import { createClient } from '@/lib/supabase/client';
 
 type ProfileFormData = z.infer<typeof profileFormSchema>;
 
@@ -32,12 +33,16 @@ interface ProfileSectionProps {
 export function ProfileSection({ currentUser }: ProfileSectionProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newAvatarUrl, setNewAvatarUrl] = useState<string | null>(null);
-  const { user_metadata: { full_name, avatar_url }, email, created_at } = currentUser;
+  const {
+    user_metadata: { full_name, avatar_url },
+    email,
+    created_at,
+  } = currentUser;
   const name = full_name || email?.split('@')[0] || 'Usuario';
   const userCreatedAt = new Date(created_at).toLocaleDateString('es-ES', {
     day: '2-digit',
     month: 'long',
-    year: 'numeric'
+    year: 'numeric',
   });
 
   const form = useForm<ProfileFormData>({
@@ -55,32 +60,44 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
 
   const onSubmit = async (data: ProfileFormData) => {
     console.log('Datos validados del formulario:', data);
-    
+
     try {
-      let avatarUrl = avatar_url; 
-    
+      let avatarUrl = avatar_url;
+
       if (newAvatarUrl !== null) {
         avatarUrl = newAvatarUrl;
       }
-      
+
       const profileData = {
         name: data.name,
         email: data.email,
         avatarUrl: avatarUrl,
       };
-      
-      const { data: updateResult, error } = await updateUserProfile(profileData, currentUser);
-      
+
+      const { data: updateResult, error } = await updateUserProfile(
+        profileData,
+        currentUser
+      );
+
       if (error) {
         console.error('Error al actualizar perfil:', error);
         toast.error('Error al actualizar el perfil');
         return;
       }
-      
+
       console.log('Resultado de la actualización:', updateResult);
+
+      // Refrescar la sesión del usuario para actualizar inmediatamente el nav_user
+      const supabase = createClient();
+      await supabase.auth.refreshSession();
+
       toast.success('Perfil actualizado correctamente');
       setIsEditing(false);
-      
+
+      // Forzar un refresh de la página para asegurar que todos los componentes se actualicen
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Error al guardar:', error);
       toast.error('Error al guardar los cambios');
@@ -144,13 +161,13 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
                   id='name'
                   startIcon={User}
                   value={form.watch('name')}
-                  onChange={e =>
-                    form.setValue('name', e.target.value)
-                  }
+                  onChange={e => form.setValue('name', e.target.value)}
                   disabled={!isEditing}
                 />
                 {form.formState.errors.name && (
-                  <p className='text-sm text-red-500'>{form.formState.errors.name.message}</p>
+                  <p className='text-sm text-red-500'>
+                    {form.formState.errors.name.message}
+                  </p>
                 )}
               </div>
               <div className='space-y-2'>
@@ -160,13 +177,13 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
                   startIcon={Mail}
                   type='email'
                   value={form.watch('email')}
-                  onChange={e =>
-                    form.setValue('email', e.target.value)
-                  }
-                  disabled={!isEditing}
+                  onChange={e => form.setValue('email', e.target.value)}
+                  disabled
                 />
                 {form.formState.errors.email && (
-                  <p className='text-sm text-red-500'>{form.formState.errors.email.message}</p>
+                  <p className='text-sm text-red-500'>
+                    {form.formState.errors.email.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -175,9 +192,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
               <Label>Miembro desde</Label>
               <div className='flex items-center space-x-2 text-sm text-muted-foreground'>
                 <Calendar className='h-4 w-4' />
-                <span>
-                  {userCreatedAt}
-                </span>
+                <span>{userCreatedAt}</span>
               </div>
             </div>
           </CardContent>
@@ -195,9 +210,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
           <CardContent className='space-y-3'>
             <div className='flex items-center justify-between'>
               <div className='space-y-1'>
-                <p className='text-sm font-medium leading-none'>
-                  Vendedor
-                </p>
+                <p className='text-sm font-medium leading-none'>Vendedor</p>
                 <p className='text-sm text-muted-foreground'>
                   Gestión de ventas y clientes
                 </p>
@@ -206,9 +219,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
             </div>
             <div className='flex items-center justify-between'>
               <div className='space-y-1'>
-                <p className='text-sm font-medium leading-none'>
-                  Supervisor
-                </p>
+                <p className='text-sm font-medium leading-none'>Supervisor</p>
                 <p className='text-sm text-muted-foreground'>
                   Supervisión de equipo de ventas
                 </p>
@@ -229,9 +240,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
             <ShoppingCart className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>
-              156
-            </div>
+            <div className='text-2xl font-bold'>156</div>
             <p className='text-xs text-muted-foreground'>
               +12% desde el mes pasado
             </p>
@@ -244,9 +253,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
             <TrendingUp className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>
-              $45,780
-            </div>
+            <div className='text-2xl font-bold'>$45,780</div>
             <p className='text-xs text-muted-foreground'>
               +8% desde el mes pasado
             </p>
@@ -261,9 +268,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
             <Package className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>
-              234
-            </div>
+            <div className='text-2xl font-bold'>234</div>
             <p className='text-xs text-muted-foreground'>
               +3 nuevos esta semana
             </p>
@@ -276,9 +281,7 @@ export function ProfileSection({ currentUser }: ProfileSectionProps) {
             <Users className='h-4 w-4 text-muted-foreground' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold'>
-              89
-            </div>
+            <div className='text-2xl font-bold'>89</div>
             <p className='text-xs text-muted-foreground'>+5 nuevos este mes</p>
           </CardContent>
         </Card>

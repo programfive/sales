@@ -1,6 +1,6 @@
-import { createClient } from "@/lib/supabase/client";
-import { v4 as uuidv4 } from "uuid";
-import imageCompression from "browser-image-compression";
+import { createClient } from '@/lib/supabase/client';
+import { v4 as uuidv4 } from 'uuid';
+import imageCompression from 'browser-image-compression';
 
 function getStorage() {
   const { storage } = createClient();
@@ -12,45 +12,85 @@ type UploadProps = {
   bucket: string;
   folder?: string;
 };
+
 export const uploadImage = async ({ file, bucket, folder }: UploadProps) => {
   const fileName = file.name;
-  const fileExtension = fileName.slice(fileName.lastIndexOf(".") + 1);
-  const path = `${folder ? folder + "/" : ""}${uuidv4()}.${fileExtension}`;
+  const fileExtension = fileName.slice(fileName.lastIndexOf('.') + 1);
+  const path = `${folder ? folder + '/' : ''}${uuidv4()}.${fileExtension}`;
 
   try {
+    // Comprimir la imagen
     file = await imageCompression(file, {
       maxSizeMB: 1,
+      maxWidthOrHeight: 1024,
     });
   } catch (error) {
-    console.error(error);
-    return { imageUrl: "", error: "Image compression failed" };
+    console.error('Error comprimiendo imagen:', error);
+    return { imageUrl: '', error: 'Image compression failed' };
   }
 
   const storage = getStorage();
 
-  const { data, error } = await storage.from(bucket).upload(path, file);
+  try {
+    const { data, error } = await storage.from(bucket).upload(path, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
 
-  if (error) {
-    return { imageUrl: "", error: "Image upload failed" };
+    if (error) {
+      console.error('Error subiendo imagen:', error);
+      return { imageUrl: '', error: error.message || 'Image upload failed' };
+    }
+
+    if (!data?.path) {
+      console.error('No se recibió path de la imagen subida');
+      return { imageUrl: '', error: 'No path received from upload' };
+    }
+
+    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${data.path}`;
+    console.log('Imagen subida exitosamente:', imageUrl);
+
+    return { imageUrl, error: '' };
+  } catch (error) {
+    console.error('Error inesperado subiendo imagen:', error);
+    return { imageUrl: '', error: 'Unexpected upload error' };
   }
-
-  const imageUrl = `${process.env
-    .NEXT_PUBLIC_SUPABASE_URL!}/storage/v1/object/public/${bucket}/${
-    data?.path
-  }`;
-
-  return { imageUrl, error: "" };
 };
+
 export const deleteImage = async (imageUrl: string) => {
-  const bucketAndPathString = imageUrl.split("/storage/v1/object/public/")[1];
-  const firstSlashIndex = bucketAndPathString.indexOf("/");
+  if (!imageUrl) {
+    console.warn('URL de imagen vacía para eliminar');
+    return { data: null, error: null };
+  }
 
-  const bucket = bucketAndPathString.slice(0, firstSlashIndex);
-  const path = bucketAndPathString.slice(firstSlashIndex + 1);
+  try {
+    const bucketAndPathString = imageUrl.split('/storage/v1/object/public/')[1];
+    if (!bucketAndPathString) {
+      console.warn('URL de imagen inválida:', imageUrl);
+      return { data: null, error: 'Invalid image URL' };
+    }
 
-  const storage = getStorage();
+    const firstSlashIndex = bucketAndPathString.indexOf('/');
+    if (firstSlashIndex === -1) {
+      console.warn('URL de imagen malformada:', imageUrl);
+      return { data: null, error: 'Malformed image URL' };
+    }
 
-  const { data, error } = await storage.from(bucket).remove([path]);
+    const bucket = bucketAndPathString.slice(0, firstSlashIndex);
+    const path = bucketAndPathString.slice(firstSlashIndex + 1);
 
-  return { data, error };
+    const storage = getStorage();
+    const { data, error } = await storage.from(bucket).remove([path]);
+
+    if (error) {
+      console.error('Error eliminando imagen:', error);
+    } else {
+      console.log('Imagen eliminada exitosamente:', path);
+    }
+
+    return { data, error };
+  } catch (error) {
+    console.error('Error inesperado eliminando imagen:', error);
+    return { data: null, error: 'Unexpected delete error' };
+  }
 };

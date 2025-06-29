@@ -69,8 +69,6 @@ export function NavUser({ user, isLoading }: NavUserProps) {
   const userEmail = user.email || '';
   const userAvatar = user.user_metadata?.avatar_url;
 
-
-
   const userInitials = getInitials(userName);
 
   return (

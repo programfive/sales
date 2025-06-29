@@ -1,5 +1,26 @@
 import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from '@/constants/file';
 import z from 'zod';
+export const exportSchema = z
+  .object({
+    format: z.enum(['pdf', 'excel', 'json'], {
+      required_error: 'Selecciona un formato',
+    }),
+    startDate: z.date({
+      required_error: 'La fecha inicial es requerida',
+    }),
+    endDate: z.date({
+      required_error: 'La fecha final es requerida',
+    }),
+  })
+  .refine(
+    data => {
+      return data.endDate >= data.startDate;
+    },
+    {
+      message: 'La fecha final debe ser posterior a la fecha inicial',
+      path: ['endDate'],
+    }
+  );
 
 export const profileFormSchema = z.object({
   name: z
@@ -17,4 +38,13 @@ export const profileFormSchema = z.object({
     )
     .optional(),
   avatarUrl: z.string().optional(),
+});
+
+export const categorySchema = z.object({
+  name: z
+    .string()
+    .min(1, 'El nombre es obligatorio')
+    .max(100, 'Máximo 100 caracteres'),
+  description: z.string().max(255, 'Máximo 255 caracteres').optional(),
+  is_active: z.boolean().optional(),
 });
